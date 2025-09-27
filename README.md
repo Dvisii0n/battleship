@@ -1,19 +1,2 @@
-# webpack-template
-Webpack template repo for setting up projects quickly
-
-Commands:
-
-Install dependencies:
-
-```bash
-npm install -D webpack webpack-cli html-webpack-plugin style-loader css-loader html-loader webpack-dev-server webpack-merge
-```
-Build in production mode
-```bash
-npm run build
-``` 
-Start webpack dev server
-```bash
-npm run dev
-``` 
-
+# Battleship Game
+Final project of the JavaScript section of The Odin Project, done with the purpose of integrating skills related to DOM Manipulation, Data Structures, OOP and TDD.
