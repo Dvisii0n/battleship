@@ -1,0 +1,30 @@
+/*Main Menu*/
+.menu-container {
+    display: flex;
+    gap: 8px;
+}
+.play-btn,
+.set-grid-size-btn {
+    width: 90px;
+    height: 30px;
+}
+
+/*Grid size menu*/
+.set-grid-container {
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    border: 1px solid black;
+}
+
+.set-grid-container > .label {
+    font-weight: 10px;
+}
+
+.hidden {
+    display: none;
+}
