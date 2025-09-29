@@ -1,22 +1,9 @@
 class Ship {
-    constructor(length, shipClass) {
-        this.shipClass = shipClass;
+    constructor(length, shipName) {
+        this.name = shipName;
         this.length = length;
         this.hits = 0;
         this.sunk = false;
-        this.currentMessage = "";
-    }
-
-    clearCurrentMessage() {
-        return (this.currentMessage = "");
-    }
-
-    changeCurrentMessage(msg) {
-        return (this.currentMessage = msg);
-    }
-
-    getCurrentMessage() {
-        return this.currentMessage;
     }
 
     hit() {
@@ -37,6 +24,7 @@ class GameBoard {
         this.misses = [];
         this.sunkShips = [];
         this.shipCount = 5;
+        this.currentMessage = "";
     }
 
     #initializeBoard(size) {
@@ -63,22 +51,41 @@ class GameBoard {
         return this.sunkShips.length === this.shipCount;
     }
 
-    placeShip(ship, coords) {
+    clearCurrentMessage() {
+        return (this.currentMessage = "");
+    }
+
+    changeCurrentMessage(msg) {
+        return (this.currentMessage = msg);
+    }
+
+    getCurrentMessage() {
+        return this.currentMessage;
+    }
+
+    placeShip(ship, coords, axis) {
         const pos = this.#getPosition(coords);
         if (this.board[pos.x][pos.y] !== 0) {
             return this.changeCurrentMessage("Space already taken");
         }
 
         const spaceAvailable = this.board[pos.x].slice(pos.y).length;
-
-        if (ship.length <= spaceAvailable) {
-            this.board[pos.x][pos.y] = ship;
+        this.board[pos.x][pos.y] = ship;
+        if (ship.length <= spaceAvailable && axis === "y") {
             for (let i = 0; i < ship.length; i++) {
                 this.board[pos.x][pos.y + i] = ship;
+            }
+        } else if (ship.length <= spaceAvailable && axis === "x") {
+            for (let i = 0; i < ship.length; i++) {
+                this.board[pos.x + i][pos.y] = ship;
             }
         } else {
             return this.changeCurrentMessage("Ship doesn't fit in this square");
         }
+
+        this.changeCurrentMessage(
+            `Succesfully added ${ship.name} on axis ${axis}`
+        );
     }
 
     recieveAttack(coords) {
