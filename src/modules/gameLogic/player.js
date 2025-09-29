@@ -4,9 +4,8 @@ class Player {
         this.type = type;
     }
 
-    printBoard() {
-        console.log(this.type + ":");
-        console.log(this.gameboard);
+    getBoard() {
+        return this.gameboard.board;
     }
 }
 
