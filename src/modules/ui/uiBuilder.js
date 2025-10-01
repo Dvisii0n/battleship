@@ -50,39 +50,45 @@ class ContainerFactory {
         return container;
     }
 
-    buildBoard(board) {
-        const container = this.buildElement("div", "player-board");
-
+    #buildColCharsContainer(board) {
         const boardLength = Object.keys(board).length;
+        const startDecimalValue = 65; //ascii val for "A"
 
-        const rowNums = this.buildElement("div", "rowNums");
-        const emptySquare = this.buildElement("div", "row-num-square");
-        rowNums.appendChild(emptySquare);
+        const colCharsContainer = this.buildElement("div", "colLetters");
+        const emptySquare = this.buildElement("div", "char-square");
+        colCharsContainer.appendChild(emptySquare);
 
-        for (let row = 1; row <= boardLength; row++) {
+        for (let col = 0; col < boardLength; col++) {
+            const char = String.fromCharCode(startDecimalValue + col);
+            const charSquare = this.buildElement("div", "char-square", char);
+            colCharsContainer.appendChild(charSquare);
+        }
+
+        return colCharsContainer;
+    }
+
+    buildBoard(board) {
+        const boardLength = Object.keys(board).length;
+        const container = this.buildElement("div", "player-board");
+        const colCharsContainer = this.#buildColCharsContainer(board);
+
+        container.appendChild(colCharsContainer);
+
+        for (let row = 0; row < boardLength; row++) {
             const rowNumSquare = this.buildElement(
                 "div",
                 "row-num-square",
-                `${row}`
+                row + 1
             );
-            rowNums.appendChild(rowNumSquare);
-        }
-        container.appendChild(rowNums);
+            const rowContainer = this.buildElement("div", "row-container");
+            rowContainer.appendChild(rowNumSquare);
 
-        const startDecimalValue = 65; //ascii val for "A"
-
-        for (let col = 0; col < boardLength; col++) {
-            const column = this.buildElement("div", "grid-column");
-            const char = String.fromCharCode(startDecimalValue + col);
-            const charSquare = this.buildElement("div", "char-square", char);
-            column.appendChild(charSquare);
-
-            for (let row = 0; row < board[col].length; row++) {
-                const square = this.buildElement("div", "grid-square");
-                square.setAttribute("id", `[${col}, ${row}]`);
-                column.appendChild(square);
+            for (let col = 0; col < board[row].length; col++) {
+                const gridSquare = this.buildElement("div", "grid-square");
+                gridSquare.setAttribute("id", `[${row}, ${col}]`);
+                rowContainer.appendChild(gridSquare);
             }
-            container.appendChild(column);
+            container.appendChild(rowContainer);
         }
 
         return container;
