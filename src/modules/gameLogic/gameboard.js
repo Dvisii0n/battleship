@@ -21,6 +21,7 @@ class GameBoard {
     constructor(size) {
         this.size = size;
         this.board = this.#initializeBoard(this.size);
+        this.length = Object.keys(this.board).length;
         this.misses = [];
         this.sunkShips = [];
         this.shipCount = 5;
@@ -33,10 +34,10 @@ class GameBoard {
         const height = sizeArr[1];
 
         let board = {};
-        for (let col = 0; col < width; col++) {
-            board[col] = [];
-            for (let row = 0; row < height; row++) {
-                board[col][row] = 0;
+        for (let row = 0; row < height; row++) {
+            board[row] = [];
+            for (let col = 0; col < width; col++) {
+                board[row][col] = 0;
             }
         }
 
@@ -44,7 +45,7 @@ class GameBoard {
     }
 
     #getPosition(coordsArr) {
-        return { x: coordsArr[0], y: coordsArr[1] };
+        return { y: coordsArr[0], x: coordsArr[1] };
     }
 
     #allShipsSunk() {
@@ -63,21 +64,42 @@ class GameBoard {
         return this.currentMessage;
     }
 
+    getBoardLength() {
+        return this.board.length;
+    }
+
+    #calculateSpaceOnAxisY(rowN, colN) {
+        let spacesArr = [];
+        for (let row = rowN; row < this.length; row++) {
+            this.board[row][colN] === 0 ? spacesArr.push(0) : spacesArr.push(1);
+        }
+
+        const availableSpace = spacesArr.slice(0, spacesArr.indexOf(1)).length;
+
+        return availableSpace;
+    }
+
     placeShip(ship, coords, axis) {
         const pos = this.#getPosition(coords);
-        if (this.board[pos.x][pos.y] !== 0) {
+        const col = pos.x;
+        const row = pos.y;
+        if (this.board[row][col] !== 0) {
             return this.changeCurrentMessage("Space already taken");
         }
 
-        const spaceAvailable = this.board[pos.x].slice(pos.y).length;
-        this.board[pos.x][pos.y] = ship;
-        if (ship.length <= spaceAvailable && axis === "y") {
+        const spaceAvailableOnAxisX = this.board[row].slice(col).length;
+        const spaceAvailableOnAxisY = this.#calculateSpaceOnAxisY(row, col);
+        console.log(spaceAvailableOnAxisY);
+
+        if (ship.length <= spaceAvailableOnAxisX && axis === "x") {
+            this.board[row][col] = ship;
             for (let i = 0; i < ship.length; i++) {
-                this.board[pos.x][pos.y + i] = ship;
+                this.board[row][col + i] = ship;
             }
-        } else if (ship.length <= spaceAvailable && axis === "x") {
+        } else if (ship.length <= spaceAvailableOnAxisY && axis === "y") {
+            this.board[row][col] = ship;
             for (let i = 0; i < ship.length; i++) {
-                this.board[pos.x + i][pos.y] = ship;
+                this.board[row + i][col] = ship;
             }
         } else {
             return this.changeCurrentMessage("Ship doesn't fit in this square");
@@ -90,7 +112,9 @@ class GameBoard {
 
     recieveAttack(coords) {
         const pos = this.#getPosition(coords);
-        const ship = this.board[pos.x][pos.y];
+        const row = pos.y;
+        const col = pos.x;
+        const ship = this.board[row][col];
         if (ship !== 0) {
             ship.hit();
 
