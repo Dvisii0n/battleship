@@ -77,8 +77,17 @@ body {
 /*Boards*/
 .player-board {
     display: flex;
+    flex-direction: column;
     grid-row: 1 / 4;
     grid-column: 1 / 2;
+}
+
+.colLetters {
+    display: flex;
+}
+
+.row-container {
+    display: flex;
 }
 
 .grid-square {
