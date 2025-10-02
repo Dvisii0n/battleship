@@ -58,8 +58,9 @@ body {
 .play-menu {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr 9fr 1fr;
-    gap: 12px;
+    grid-template-rows: 1fr 9fr 1fr 1fr;
+    column-gap: 21px;
+    row-gap: 8px;
 }
 
 .axis-label {
@@ -74,11 +75,17 @@ body {
     grid-row: 3 /4;
 }
 
+.reset-btn {
+    border-radius: 12px;
+    grid-column: 2/3;
+    grid-row: 4/5;
+}
+
 /*Boards*/
 .player-board {
     display: flex;
     flex-direction: column;
-    grid-row: 1 / 4;
+    grid-row: 1 / 5;
     grid-column: 1 / 2;
 }
 
@@ -141,7 +148,11 @@ body {
 }
 
 .set {
-    background-color: rgb(6, 255, 68);
+    background-color: rgba(6, 255, 68, 0.185);
+}
+
+.placed {
+    filter: grayscale(100%);
 }
 
 .ship-sprite.carrier {
