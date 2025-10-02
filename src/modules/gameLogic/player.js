@@ -7,6 +7,10 @@ class Player {
     getBoard() {
         return this.gameboard.board;
     }
+
+    getBoardLength() {
+        return Object.keys(this.getBoard()).length;
+    }
 }
 
 export { Player };
