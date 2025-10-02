@@ -29,4 +29,22 @@ export default class Game {
     addPlayer(player) {
         this.players.push(player);
     }
+
+    placeShipOnPlayerBoard(
+        playerGameboard,
+        shipName,
+        shipLength,
+        coords,
+        axis
+    ) {
+        playerGameboard.placeShip(shipName, shipLength, coords, axis);
+    }
+
+    clearPlayerBoard(playerGameboard) {
+        playerGameboard.clearBoard();
+    }
+
+    allShipsPlacedOnPlayerBoard(playerBoard) {
+        return playerBoard.allShipsArePlaced();
+    }
 }
