@@ -22,10 +22,11 @@ class GameBoard {
         this.size = size;
         this.board = this.#initializeBoard(this.size);
         this.length = Object.keys(this.board).length;
+        this.placedShips = [];
+        this.currentMessage = "";
         this.misses = [];
         this.sunkShips = [];
         this.shipCount = 5;
-        this.currentMessage = "";
     }
 
     #initializeBoard(size) {
@@ -50,6 +51,15 @@ class GameBoard {
 
     #allShipsSunk() {
         return this.sunkShips.length === this.shipCount;
+    }
+
+    #isPlaced(shipName) {
+        return this.placedShips.find((item) => item === shipName);
+    }
+
+    allShipsArePlaced() {
+        console.log(this.board);
+        return this.placedShips.length === this.shipCount;
     }
 
     clearCurrentMessage() {
@@ -79,7 +89,17 @@ class GameBoard {
         return availableSpace;
     }
 
-    placeShip(ship, coords, axis) {
+    clearBoard() {
+        this.board = this.#initializeBoard(this.size);
+        this.placedShips = [];
+        this.currentMessage = "";
+    }
+
+    placeShip(shipName, shipLength, coords, axis) {
+        if (this.#isPlaced(shipName)) {
+            return this.changeCurrentMessage("Ship already placed");
+        }
+
         const pos = this.#getPosition(coords);
         const col = pos.x;
         const row = pos.y;
@@ -89,7 +109,8 @@ class GameBoard {
 
         const spaceAvailableOnAxisX = this.board[row].slice(col).length;
         const spaceAvailableOnAxisY = this.#calculateSpaceOnAxisY(row, col);
-        console.log(spaceAvailableOnAxisY);
+
+        const ship = new Ship(shipLength, shipName);
 
         if (ship.length <= spaceAvailableOnAxisX && axis === "x") {
             this.board[row][col] = ship;
@@ -104,6 +125,8 @@ class GameBoard {
         } else {
             return this.changeCurrentMessage("Ship doesn't fit in this square");
         }
+
+        this.placedShips.push(ship.name);
 
         this.changeCurrentMessage(
             `Succesfully added ${ship.name} on axis ${axis}`
@@ -131,4 +154,4 @@ class GameBoard {
     }
 }
 
-export { Ship, GameBoard };
+export { GameBoard };
