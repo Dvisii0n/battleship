@@ -1,6 +1,5 @@
 import UiHandler from "./uiHandler.js";
 import Game from "../gameLogic/game.js";
-import { Ship } from "../gameLogic/gameboard.js";
 
 export default class EventHandler {
     #ui = new UiHandler();
@@ -50,11 +49,22 @@ export default class EventHandler {
         });
     }
 
-    setPlayEvent() {
+    setPlayEvents() {
         const btn = document.querySelector(".play-btn");
         btn.addEventListener("click", () => {
             this.play();
             this.setDragEvents();
+            this.setResetBoardEvent();
+        });
+    }
+
+    setResetBoardEvent() {
+        const btn = document.querySelector(".reset-btn");
+        btn.addEventListener("click", () => {
+            const player = this.#game.getPlayers()[0];
+            this.#game.clearPlayerBoard(player.gameboard);
+            this.#ui.recolorShips();
+            this.#ui.renderPlacedShips(player.getBoard());
         });
     }
 
@@ -85,32 +95,41 @@ export default class EventHandler {
 
     onDrop(event, source) {
         const target = event.target;
+
+        if (target.classList.contains("active")) {
+            target.classList.remove("active");
+        }
+
         const player1 = this.#game.getPlayers()[0];
-        const coords = JSON.parse(target.id);
+        const coords = target.id.split("");
+        const row = coords[1];
+        const col = coords[3];
+        const coordsArr = JSON.parse(`[${row}, ${col}]`);
         const shipLength = source.getAttribute("ship_length");
         const shipName = source.id;
 
-        console.log(shipLength, shipName, coords);
-
-        player1.gameboard.placeShip(
-            new Ship(shipLength, shipName),
-            coords,
+        this.#game.placeShipOnPlayerBoard(
+            player1.gameboard,
+            shipName,
+            shipLength,
+            coordsArr,
             this.#axis
         );
-        console.log(player1.gameboard);
+
+        this.#ui.renderPlacedShips(player1.getBoard());
+
+        if (this.#game.allShipsPlacedOnPlayerBoard(player1.gameboard)) {
+            alert("All ships are ready to sail");
+        }
     }
 
     onDragEnter(event) {
         const targetClassList = event.target.classList;
-        if (!targetClassList.contains("active")) {
-            targetClassList.add("active");
-        }
+        targetClassList.add("active");
     }
 
     onDragLeave(event) {
         const targetClassList = event.target.classList;
-        if (targetClassList.contains("active")) {
-            targetClassList.remove("active");
-        }
+        targetClassList.remove("active");
     }
 }

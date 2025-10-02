@@ -85,7 +85,7 @@ class ContainerFactory {
 
             for (let col = 0; col < board[row].length; col++) {
                 const gridSquare = this.buildElement("div", "grid-square");
-                gridSquare.setAttribute("id", `[${row}, ${col}]`);
+                gridSquare.setAttribute("id", `r${row}c${col}`);
                 rowContainer.appendChild(gridSquare);
             }
             container.appendChild(rowContainer);
@@ -148,6 +148,11 @@ class MenuFactory {
             "start-btn",
             "Start"
         );
+        const resetBtn = this.#cntrFactory.buildElement(
+            "button",
+            "reset-btn",
+            "Reset Board"
+        );
         const axisLabel = this.#cntrFactory.buildElement(
             "div",
             "axis-label",
@@ -157,6 +162,7 @@ class MenuFactory {
         menuContainer.appendChild(axisLabel);
         menuContainer.appendChild(boardCntr);
         menuContainer.appendChild(shipSelectionCntr);
+        menuContainer.appendChild(resetBtn);
         menuContainer.appendChild(startBtn);
 
         return menuContainer;
