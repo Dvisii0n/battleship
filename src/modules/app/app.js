@@ -9,7 +9,7 @@ export default class App {
 
         this.#events.setShowGridSize();
         this.#events.setCloseGridMenu();
-        this.#events.setPlayEvent();
+        this.#events.setPlayEvents();
         this.#events.setKeyEvents();
     }
 }
