@@ -84,7 +84,26 @@ class GameBoard {
             this.board[row][colN] === 0 ? spacesArr.push(0) : spacesArr.push(1);
         }
 
-        const availableSpace = spacesArr.slice(0, spacesArr.indexOf(1)).length;
+        let availableSpace = spacesArr.length;
+
+        if (spacesArr.includes(1)) {
+            availableSpace = spacesArr.slice(0, spacesArr.indexOf(1)).length;
+        }
+
+        return availableSpace;
+    }
+
+    #calculateSpaceOnAxisX(rowN, colN) {
+        let spacesArr = [];
+        for (let col = colN; col < this.length; col++) {
+            this.board[rowN][col] === 0 ? spacesArr.push(0) : spacesArr.push(1);
+        }
+
+        let availableSpace = spacesArr.length;
+
+        if (spacesArr.includes(1)) {
+            availableSpace = spacesArr.slice(0, spacesArr.indexOf(1)).length;
+        }
 
         return availableSpace;
     }
@@ -107,8 +126,11 @@ class GameBoard {
             return this.changeCurrentMessage("Space already taken");
         }
 
-        const spaceAvailableOnAxisX = this.board[row].slice(col).length;
+        const spaceAvailableOnAxisX = this.#calculateSpaceOnAxisX(row, col);
         const spaceAvailableOnAxisY = this.#calculateSpaceOnAxisY(row, col);
+
+        console.log(spaceAvailableOnAxisX);
+        console.log(spaceAvailableOnAxisY);
 
         const ship = new Ship(shipLength, shipName);
 
