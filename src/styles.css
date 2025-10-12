@@ -101,10 +101,6 @@ body {
     width: 50px;
     height: 50px;
     border: 1px solid black;
-}
-
-.grid-square:hover {
-    /* background-color: rgb(233, 233, 233); */
     cursor: crosshair;
 }
 
@@ -140,11 +136,20 @@ body {
 .ship-sprite:hover {
     width: 200px;
     height: auto;
-    cursor: pointer;
+    cursor: grab;
+}
+
+.grabbing {
+    cursor: grabbing;
 }
 
 .active {
     background-color: rgba(6, 255, 68, 0.185);
+}
+
+.set.forbidden,
+.forbidden {
+    background-color: red;
 }
 
 .set {
