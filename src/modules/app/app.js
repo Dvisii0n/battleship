@@ -7,8 +7,6 @@ export default class App {
     run() {
         this.#ui.renderMainMenu();
 
-        this.#events.setShowGridSize();
-        this.#events.setCloseGridMenu();
         this.#events.setPlayEvents();
         this.#events.setKeyEvents();
     }
