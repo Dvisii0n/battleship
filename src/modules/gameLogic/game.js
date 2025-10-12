@@ -3,6 +3,7 @@ import { GameBoard } from "./gameboard.js";
 
 export default class Game {
     constructor() {
+        this.gridSize = "10x10";
         this.players = [];
         this.gamemodeShips = [
             { name: "carrier", length: 5 },
@@ -21,8 +22,8 @@ export default class Game {
         return this.gamemodeShips;
     }
 
-    createPlayer(type, gameboardSize) {
-        const player = new Player(new GameBoard(gameboardSize), type);
+    createPlayer(type) {
+        const player = new Player(new GameBoard(this.gridSize), type);
         return player;
     }
 
