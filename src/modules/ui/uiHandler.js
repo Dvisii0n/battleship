@@ -38,6 +38,8 @@ export default class UiHandler {
                 } else {
                     activeSquare.classList.remove("set");
                 }
+                activeSquare.classList.remove("active");
+                activeSquare.classList.remove("forbidden");
             }
         }
     }
@@ -54,5 +56,55 @@ export default class UiHandler {
         });
     }
 
-    highlightAvailableSquares(shipLength) {}
+    highlightAvailableSquares(currShipLength, axis, targetSquare, size) {
+        const targetCoords = targetSquare.id.split("");
+        const targetRow = parseInt(targetCoords[1]);
+        const targetCol = parseInt(targetCoords[3]);
+        const length = parseInt(currShipLength);
+        const maxSize = parseInt(size.split("x")[0]);
+
+        for (let i = 0; i < currShipLength; i++) {
+            let availableSquare = null;
+            let nextCol = targetCol + i;
+            let nextRow = targetRow + i;
+            let exceedsSpaceOnX =
+                axis === "x" ? targetCol + length > maxSize : false;
+            let exceedsSpaceOnY =
+                axis === "y" ? targetRow + length > maxSize : false;
+
+            if (axis === "x") {
+                if (nextCol >= maxSize) {
+                    return;
+                }
+                availableSquare = document.querySelector(
+                    `#r${targetRow}c${nextCol}`
+                );
+            } else {
+                if (nextRow >= maxSize) {
+                    return;
+                }
+                availableSquare = document.querySelector(
+                    `#r${nextRow}c${targetCol}`
+                );
+            }
+
+            if (
+                availableSquare.classList.contains("set") ||
+                exceedsSpaceOnX ||
+                exceedsSpaceOnY
+            ) {
+                availableSquare.classList.add("forbidden");
+            } else {
+                availableSquare.classList.add("active");
+            }
+        }
+    }
+
+    clearActiveAndForbiddenSquares() {
+        const squares = document.querySelectorAll(".grid-square");
+        squares.forEach((square) => {
+            square.classList.remove("active");
+            square.classList.remove("forbidden");
+        });
+    }
 }

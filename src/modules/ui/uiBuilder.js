@@ -11,41 +11,8 @@ class ContainerFactory {
     buildMenuOptions() {
         const container = this.buildElement("div", "menu-options-container");
         const playerBtn = this.buildElement("button", "play-btn", "Play");
-        const setSizeBtn = this.buildElement(
-            "button",
-            "set-grid-size-btn",
-            "Set Grid Size"
-        );
 
         container.appendChild(playerBtn);
-        container.appendChild(setSizeBtn);
-
-        return container;
-    }
-
-    buildSetGridOptions() {
-        const container = this.buildElement("div", "set-grid-container");
-        const gridSizeInput = this.buildElement("input", "set-grid-input");
-        const saveBtn = this.buildElement("button", "save-grid-btn", "Save");
-        const label = this.buildElement(
-            "div",
-            "label",
-            "Set preferred grid size e.g (10x10)"
-        );
-        const cancelBtn = this.buildElement(
-            "button",
-            "grid-size-cancel-btn",
-            "Cancel"
-        );
-
-        gridSizeInput.value = "10x10";
-
-        container.appendChild(label);
-        container.appendChild(gridSizeInput);
-        container.appendChild(saveBtn);
-        container.appendChild(cancelBtn);
-
-        container.classList.add("hidden");
 
         return container;
     }
@@ -119,15 +86,12 @@ class MenuFactory {
             "main-menu"
         );
 
-        const setGridMenu = this.#cntrFactory.buildSetGridOptions();
         const mainTitle = this.#cntrFactory.buildElement(
             "div",
             "main-title",
             "Battleship"
         );
         const menuOptions = this.#cntrFactory.buildMenuOptions();
-
-        menuContainer.appendChild(setGridMenu);
 
         menuContainer.appendChild(mainTitle);
         menuContainer.appendChild(menuOptions);

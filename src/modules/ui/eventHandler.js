@@ -7,21 +7,16 @@ export default class EventHandler {
     #body = document.querySelector("body");
     #axis = "x";
     #axisLabelTxt = ``;
-    setShowGridSize() {
-        const btn = document.querySelector(".set-grid-size-btn");
-        btn.addEventListener("click", () => this.toggleHiddenGridMenu());
-    }
-
-    setCloseGridMenu() {
-        const btn = document.querySelector(".grid-size-cancel-btn");
-        btn.addEventListener("click", () => this.toggleHiddenGridMenu());
-    }
 
     setDragEvents() {
         const ships = document.querySelectorAll(".ship-sprite");
         const squares = document.querySelectorAll(".grid-square");
-
+        const playerBoard = document.querySelector(".player-board");
         let source = null;
+
+        playerBoard.addEventListener("dragleave", (event) => {
+            this.#ui.clearActiveAndForbiddenSquares();
+        });
 
         ships.forEach((ship) => {
             ship.addEventListener("dragstart", (event) => {
@@ -32,14 +27,7 @@ export default class EventHandler {
         squares.forEach((square) => {
             square.addEventListener("dragover", (event) => {
                 event.preventDefault();
-            });
-
-            square.addEventListener("dragenter", (event) => {
-                this.onDragEnter(event);
-            });
-
-            square.addEventListener("dragleave", (event) => {
-                this.onDragLeave(event);
+                this.onDragOver(event, source);
             });
 
             square.addEventListener("drop", (event) => {
@@ -79,15 +67,9 @@ export default class EventHandler {
         });
     }
 
-    toggleHiddenGridMenu() {
-        const container = document.querySelector(".set-grid-container");
-        container.classList.toggle("hidden");
-    }
-
     play() {
-        const sizeInput = document.querySelector(".set-grid-input");
         const shipList = this.#game.getShipList();
-        const player = this.#game.createPlayer("human", sizeInput.value);
+        const player = this.#game.createPlayer("human");
 
         this.#game.addPlayer(player);
         this.#ui.renderPlayMenu(player.getBoard(), shipList);
@@ -121,15 +103,23 @@ export default class EventHandler {
         if (this.#game.allShipsPlacedOnPlayerBoard(player1.gameboard)) {
             alert("All ships are ready to sail");
         }
+
+        console.log(player1.gameboard.getCurrentMessage());
     }
 
-    onDragEnter(event) {
-        const targetClassList = event.target.classList;
-        targetClassList.add("active");
-    }
+    onDragOver(event, source) {
+        this.#ui.clearActiveAndForbiddenSquares();
 
-    onDragLeave(event) {
-        const targetClassList = event.target.classList;
-        targetClassList.remove("active");
+        const targetSquare = event.target;
+
+        const currShipLength = source.getAttribute("ship_length");
+        const size = this.#game.gridSize;
+
+        this.#ui.highlightAvailableSquares(
+            currShipLength,
+            this.#axis,
+            targetSquare,
+            size
+        );
     }
 }
