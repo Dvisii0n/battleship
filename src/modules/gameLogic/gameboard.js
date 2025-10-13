@@ -58,7 +58,7 @@ class GameBoard {
     }
 
     allShipsArePlaced() {
-        console.log(this.board);
+        this.changeCurrentMessage("All ships are placed");
         return this.placedShips.length === this.shipCount;
     }
 
@@ -128,9 +128,6 @@ class GameBoard {
 
         const spaceAvailableOnAxisX = this.#calculateSpaceOnAxisX(row, col);
         const spaceAvailableOnAxisY = this.#calculateSpaceOnAxisY(row, col);
-
-        console.log(spaceAvailableOnAxisX);
-        console.log(spaceAvailableOnAxisY);
 
         const ship = new Ship(shipLength, shipName);
 
