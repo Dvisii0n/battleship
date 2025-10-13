@@ -99,18 +99,24 @@ class MenuFactory {
         return menuContainer;
     }
 
-    buildPlayMenu(board, ships) {
+    buildPlayMenu(board, ships, currentPlayer) {
         const menuContainer = this.#cntrFactory.buildElement(
             "div",
             "play-menu"
         );
+        const playerLabel = this.#cntrFactory.buildElement(
+            "div",
+            "player-label",
+            `Player ${currentPlayer}`
+        );
         const boardCntr = this.#cntrFactory.buildBoard(board);
         const shipSelectionCntr =
             this.#cntrFactory.buildShipsSelectionContainer(ships);
-        const startBtn = this.#cntrFactory.buildElement(
+
+        const readyBtn = this.#cntrFactory.buildElement(
             "button",
-            "start-btn",
-            "Start"
+            "ready-btn",
+            "Ready"
         );
         const resetBtn = this.#cntrFactory.buildElement(
             "button",
@@ -123,11 +129,12 @@ class MenuFactory {
             "Axis: X"
         );
 
+        menuContainer.appendChild(playerLabel);
         menuContainer.appendChild(axisLabel);
         menuContainer.appendChild(boardCntr);
         menuContainer.appendChild(shipSelectionCntr);
         menuContainer.appendChild(resetBtn);
-        menuContainer.appendChild(startBtn);
+        menuContainer.appendChild(readyBtn);
 
         return menuContainer;
     }

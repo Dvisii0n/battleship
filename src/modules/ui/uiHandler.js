@@ -20,8 +20,12 @@ export default class UiHandler {
         this.#body.appendChild(mainMenu);
     }
 
-    renderPlayMenu(board, ships) {
-        const playMenu = this.#menuFactory.buildPlayMenu(board, ships);
+    renderPlayMenu(board, ships, currentPlayer) {
+        const playMenu = this.#menuFactory.buildPlayMenu(
+            board,
+            ships,
+            currentPlayer
+        );
         this.clearBody();
         this.#body.appendChild(playMenu);
     }
@@ -106,5 +110,9 @@ export default class UiHandler {
             square.classList.remove("active");
             square.classList.remove("forbidden");
         });
+    }
+
+    renderGameMenu() {
+        this.#body.textContent = "game menu here";
     }
 }
