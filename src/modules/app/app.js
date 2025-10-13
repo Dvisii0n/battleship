@@ -1,13 +1,15 @@
 import UiHandler from "../ui/uiHandler.js";
-import EventHandler from "../ui/eventHandler.js";
+import ShipsSelectionEventHandler from "../ui/shipsSelectEvents.js";
+import GameEventHandler from "../ui/gameEvents.js";
 
 export default class App {
     #ui = new UiHandler();
-    #events = new EventHandler();
+    #shipsEvents = new ShipsSelectionEventHandler();
+    #gameEvents = new GameEventHandler();
     run() {
         this.#ui.renderMainMenu();
 
-        this.#events.setPlayEvents();
-        this.#events.setKeyEvents();
+        this.#shipsEvents.setPlayEvents();
+        this.#shipsEvents.setKeyEvents();
     }
 }
