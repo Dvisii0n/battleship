@@ -58,9 +58,15 @@ body {
 .play-menu {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr 9fr 1fr 1fr;
+    grid-template-rows: 1fr 9fr 1fr 1fr 1fr;
     column-gap: 21px;
     row-gap: 8px;
+}
+
+.player-label {
+    grid-column: 1 /2;
+    grid-row: 1 / 2;
+    font-size: 45px;
 }
 
 .axis-label {
@@ -69,7 +75,7 @@ body {
     grid-row: 1 / 2;
 }
 
-.start-btn {
+.ready-btn {
     border-radius: 12px;
     grid-column: 2 /3;
     grid-row: 3 /4;
@@ -85,7 +91,7 @@ body {
 .player-board {
     display: flex;
     flex-direction: column;
-    grid-row: 1 / 5;
+    grid-row: 2 / 6;
     grid-column: 1 / 2;
 }
 
