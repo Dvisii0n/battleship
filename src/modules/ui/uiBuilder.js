@@ -110,6 +110,10 @@ class MenuFactory {
             `Player ${currentPlayer}`
         );
         const boardCntr = this.#cntrFactory.buildBoard(board);
+        const currentPlayerClass =
+            currentPlayer === 1 ? "player-one" : "player-two";
+
+        boardCntr.classList.add(currentPlayerClass);
         const shipSelectionCntr =
             this.#cntrFactory.buildShipsSelectionContainer(ships);
 
