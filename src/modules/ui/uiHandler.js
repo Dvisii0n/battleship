@@ -1,7 +1,8 @@
-import { MenuFactory } from "./uiBuilder.js";
+import { ContainerFactory, MenuFactory } from "./uiBuilder.js";
 
 export default class UiHandler {
     #menuFactory = new MenuFactory();
+    #cntrFactory = new ContainerFactory();
     #body = document.querySelector("body");
 
     clearBody() {
@@ -30,14 +31,19 @@ export default class UiHandler {
         this.#body.appendChild(playMenu);
     }
 
-    renderPlacedShips(board) {
+    renderPlacedShips(board, playerClassName) {
         const boardLength = Object.keys(board).length;
         for (let row = 0; row < boardLength; row++) {
             for (let col = 0; col < board[row].length; col++) {
                 const currShip = board[row][col];
-                const activeSquare = document.querySelector(`#r${row}c${col}`);
+                const activeSquare = document.querySelector(
+                    `.${playerClassName} > .row-container > #r${row}c${col}`
+                );
                 if (currShip !== 0) {
-                    this.#grayOutShip(currShip.name);
+                    if (document.querySelector(`#${currShip.name}`)) {
+                        this.#grayOutShip(currShip.name);
+                    }
+
                     activeSquare.classList.add("set");
                 } else {
                     activeSquare.classList.remove("set");
@@ -112,7 +118,25 @@ export default class UiHandler {
         });
     }
 
-    renderGameMenu() {
-        this.#body.textContent = "game menu here";
+    renderGameMenu(playerOneBoard, playerTwoBoard) {
+        this.clearBody();
+
+        const boardsCntr = this.#cntrFactory.buildElement(
+            "div",
+            "player-boards-container"
+        );
+
+        const playerOneGrid = this.#cntrFactory.buildBoard(playerOneBoard);
+        playerOneGrid.classList.add("player-one");
+        const playerTwoGrid = this.#cntrFactory.buildBoard(playerTwoBoard);
+        playerTwoGrid.classList.add("player-two");
+
+        boardsCntr.appendChild(playerOneGrid);
+        boardsCntr.appendChild(playerTwoGrid);
+
+        this.#body.appendChild(boardsCntr);
+
+        this.renderPlacedShips(playerOneBoard, "player-one");
+        this.renderPlacedShips(playerTwoBoard, "player-two");
     }
 }
