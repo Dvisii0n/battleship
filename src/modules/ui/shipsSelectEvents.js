@@ -1,8 +1,10 @@
 import UiHandler from "./uiHandler.js";
 import Game from "../gameLogic/game.js";
+import GameEventHandler from "./gameEvents.js";
 
 export default class ShipsSelectionEventHandler {
     #ui = new UiHandler();
+    #gameEvents = new GameEventHandler();
     #game = new Game();
     #body = document.querySelector("body");
     #axis = "x";
@@ -46,6 +48,8 @@ export default class ShipsSelectionEventHandler {
             this.setDragEvents();
             this.setResetBoardEvent();
             this.setReadyPlayerOneEvent();
+            //remove after tests
+            this.placeShipsForTest();
         });
     }
 
@@ -60,8 +64,10 @@ export default class ShipsSelectionEventHandler {
                 this.setResetBoardEvent();
                 this.#playerShipsReady = false;
                 this.setReadyPlayerTwoEvent();
+                //remove after tests
+                this.placeShipsForTest();
             } else {
-                alert("Current players ship are not ready");
+                alert("Current players ships are not ready");
             }
         });
     }
@@ -70,11 +76,9 @@ export default class ShipsSelectionEventHandler {
         const btn = document.querySelector(".ready-btn");
         btn.addEventListener("click", () => {
             if (this.#playerShipsReady) {
-                this.#ui.clearBody();
-                this.#ui.renderGameMenu();
-                console.log(this.#game.getPlayers());
+                this.startGame();
             } else {
-                alert("Current players ship are not ready");
+                alert("Current players ships are not ready");
             }
         });
     }
@@ -137,7 +141,10 @@ export default class ShipsSelectionEventHandler {
             this.#axis
         );
 
-        this.#ui.renderPlacedShips(player.getBoard());
+        const currentPlayerClass =
+            this.#currrentPlayer === 1 ? "player-one" : "player-two";
+
+        this.#ui.renderPlacedShips(player.getBoard(), currentPlayerClass);
 
         if (this.#game.allShipsPlacedOnPlayerBoard(player.gameboard)) {
             this.#playerShipsReady = true;
@@ -161,5 +168,52 @@ export default class ShipsSelectionEventHandler {
             targetSquare,
             size
         );
+    }
+
+    startGame() {
+        const players = this.#game.getPlayers();
+
+        const playerOne = players[0];
+        const playerTwo = players[1];
+
+        this.#ui.renderGameMenu(playerOne.getBoard(), playerTwo.getBoard());
+        console.log(players);
+
+        this.#gameEvents.setAttackEvent(this.#game);
+    }
+
+    placeShipsForTest() {
+        const player = this.#game.getPlayers()[this.#currrentPlayer - 1];
+
+        const ships = this.#game.gamemodeShips;
+
+        const presetCoords = [
+            [0, 0],
+            [2, 0],
+            [4, 0],
+            [6, 0],
+            [8, 0],
+        ];
+
+        for (let i = 0; i < ships.length; i++) {
+            this.#game.placeShipOnPlayerBoard(
+                player.gameboard,
+                ships[i].name,
+                ships[i].length,
+                presetCoords[i],
+                "x"
+            );
+        }
+
+        const currentPlayerClass =
+            this.#currrentPlayer === 1 ? "player-one" : "player-two";
+
+        this.#ui.renderPlacedShips(player.getBoard(), currentPlayerClass);
+
+        if (this.#game.allShipsPlacedOnPlayerBoard(player.gameboard)) {
+            this.#playerShipsReady = true;
+        }
+
+        console.log(player.gameboard.getCurrentMessage());
     }
 }
