@@ -25,6 +25,7 @@ class GameBoard {
         this.placedShips = [];
         this.currentMessage = "";
         this.misses = [];
+        this.hits = [];
         this.sunkShips = [];
         this.shipCount = 5;
     }
@@ -152,13 +153,14 @@ class GameBoard {
         );
     }
 
-    recieveAttack(coords) {
+    receiveAttack(coords) {
         const pos = this.#getPosition(coords);
         const row = pos.y;
         const col = pos.x;
         const ship = this.board[row][col];
         if (ship !== 0) {
             ship.hit();
+            this.hits.push(coords);
 
             if (ship.isSunk()) {
                 this.sunkShips.push(ship);
