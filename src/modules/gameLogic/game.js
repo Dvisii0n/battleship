@@ -18,6 +18,26 @@ export default class Game {
         return this.players;
     }
 
+    getPlayerOne() {
+        return this.players[0];
+    }
+
+    getPlayerTwo() {
+        return this.players[1];
+    }
+
+    getHits(playerName) {
+        const playerOneHits = this.players[0].gameboard.hits;
+        const playerTwoHits = this.players[1].gameboard.hits;
+        return playerName === "player-one" ? playerOneHits : playerTwoHits;
+    }
+
+    getMisses(playerName) {
+        const playerOneMisses = this.players[0].gameboard.misses;
+        const playerTwoMisses = this.players[1].gameboard.misses;
+        return playerName === "player-one" ? playerOneMisses : playerTwoMisses;
+    }
+
     getShipList() {
         return this.gamemodeShips;
     }
