@@ -158,8 +158,12 @@ body {
     background-color: red;
 }
 
-.set {
-    background-color: rgba(6, 255, 68, 0.185);
+.player-one > .row-container > .set {
+    background-color: rgba(1, 18, 255, 0.432);
+}
+
+.player-two > .row-container > .set {
+    background-color: rgba(255, 1, 1, 0.493);
 }
 
 .placed {
@@ -184,4 +188,11 @@ body {
 
 .ship-sprite.patrol_boat {
     content: url("./assets/ships/x/patrol_boat_x.png");
+}
+
+/*Game section */
+
+.player-boards-container {
+    display: flex;
+    gap: 25px;
 }
