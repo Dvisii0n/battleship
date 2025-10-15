@@ -10,6 +10,7 @@ export default class ShipsSelectionEventHandler {
     #axis = "x";
     #axisLabelTxt = ``;
     #currrentPlayer = 0;
+    #currentPlayerClassName = "";
     #playerShipsReady = false;
 
     setDragEvents() {
@@ -90,7 +91,10 @@ export default class ShipsSelectionEventHandler {
             const player = this.#game.getPlayers()[this.#currrentPlayer - 1];
             this.#game.clearPlayerBoard(player.gameboard);
             this.#ui.recolorShips();
-            this.#ui.renderPlacedShips(player.getBoard());
+            this.#ui.renderPlacedShips(
+                player.getBoard(),
+                this.#currentPlayerClassName
+            );
         });
     }
 
@@ -107,6 +111,8 @@ export default class ShipsSelectionEventHandler {
 
     play() {
         this.#currrentPlayer += 1;
+        this.#currentPlayerClassName =
+            this.#currrentPlayer === 1 ? "player-one" : "player-two";
         const shipList = this.#game.getShipList();
         const player = this.#game.createPlayer("human");
 
@@ -141,15 +147,17 @@ export default class ShipsSelectionEventHandler {
             this.#axis
         );
 
-        const currentPlayerClass =
-            this.#currrentPlayer === 1 ? "player-one" : "player-two";
-
-        this.#ui.renderPlacedShips(player.getBoard(), currentPlayerClass);
+        this.#ui.renderPlacedShips(
+            player.getBoard(),
+            this.#currentPlayerClassName
+        );
 
         if (this.#game.allShipsPlacedOnPlayerBoard(player.gameboard)) {
             this.#playerShipsReady = true;
             alert("All ships are ready to sail");
         }
+
+        console.log(player.gameboard);
 
         console.log(player.gameboard.getCurrentMessage());
     }
@@ -177,7 +185,6 @@ export default class ShipsSelectionEventHandler {
         const playerTwo = players[1];
 
         this.#ui.renderGameMenu(playerOne.getBoard(), playerTwo.getBoard());
-        console.log(players);
 
         this.#gameEvents.setAttackEvent(this.#game);
     }
@@ -205,10 +212,10 @@ export default class ShipsSelectionEventHandler {
             );
         }
 
-        const currentPlayerClass =
-            this.#currrentPlayer === 1 ? "player-one" : "player-two";
-
-        this.#ui.renderPlacedShips(player.getBoard(), currentPlayerClass);
+        this.#ui.renderPlacedShips(
+            player.getBoard(),
+            this.#currentPlayerClassName
+        );
 
         if (this.#game.allShipsPlacedOnPlayerBoard(player.gameboard)) {
             this.#playerShipsReady = true;
