@@ -110,6 +110,10 @@ body {
     cursor: crosshair;
 }
 
+.grid-square:hover {
+    background-color: rgba(6, 255, 6, 0.425);
+}
+
 .char-square,
 .row-num-square {
     width: 50px;
@@ -195,4 +199,9 @@ body {
 .player-boards-container {
     display: flex;
     gap: 25px;
+}
+
+.hit {
+    background-image: url("./assets/gifs/fire.gif");
+    background-size: cover;
 }
