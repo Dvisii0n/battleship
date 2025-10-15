@@ -1,6 +1,9 @@
 import UiHandler from "./uiHandler.js";
 
 export default class GameEventHandler {
+    #ui = new UiHandler();
+    #playerOneClassName = "player-one";
+    #playerTwoClassName = "player-two";
     setAttackEvent(game) {
         const squares = document.querySelectorAll(".grid-square");
 
@@ -17,23 +20,45 @@ export default class GameEventHandler {
         const playerOne = game.getPlayerOne();
         const playerTwo = game.getPlayerTwo();
 
-        const playerOneHits = game.getHits("player-one").join("-");
-        const playerTwoHits = game.getHits("player-two").join("-");
+        const playerOneHitsStr = game
+            .getHits(this.#playerOneClassName)
+            .join("-");
+        const playerTwoHitsStr = game
+            .getHits(this.#playerTwoClassName)
+            .join("-");
 
         const parentBoard = square.parentNode.parentNode;
 
         const coordsArr = this.getCoordsArrFromId(coordsId);
 
-        if (parentBoard.classList.contains("player-one")) {
-            if (!playerOneHits.includes(`${coordsArr}`)) {
+        if (parentBoard.classList.contains(this.#playerOneClassName)) {
+            if (!playerOneHitsStr.includes(`${coordsArr}`)) {
                 playerOne.gameboard.receiveAttack(coordsArr);
+                this.#ui.renderHits(
+                    game.getHits(this.#playerOneClassName),
+                    this.#playerOneClassName
+                );
             }
-        } else if (parentBoard.classList.contains("player-two")) {
-            if (!playerTwoHits.includes(`${coordsArr}`)) {
+        } else if (parentBoard.classList.contains(this.#playerTwoClassName)) {
+            if (!playerTwoHitsStr.includes(`${coordsArr}`)) {
                 playerTwo.gameboard.receiveAttack(coordsArr);
+                this.#ui.renderHits(
+                    game.getHits(this.#playerTwoClassName),
+                    this.#playerTwoClassName
+                );
             }
         }
 
+        console.log(
+            `${
+                this.#playerOneClassName
+            }: ${playerOne.gameboard.getCurrentMessage()}`
+        );
+        console.log(
+            `${
+                this.#playerTwoClassName
+            }: ${playerTwo.gameboard.getCurrentMessage()}`
+        );
         console.log(game.getPlayers());
     }
 
