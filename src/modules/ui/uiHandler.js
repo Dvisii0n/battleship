@@ -2,7 +2,6 @@ import { ContainerFactory, MenuFactory } from "./uiBuilder.js";
 
 export default class UiHandler {
     #menuFactory = new MenuFactory();
-    #cntrFactory = new ContainerFactory();
     #body = document.querySelector("body");
 
     clearBody() {
@@ -121,22 +120,26 @@ export default class UiHandler {
     renderGameMenu(playerOneBoard, playerTwoBoard) {
         this.clearBody();
 
-        const boardsCntr = this.#cntrFactory.buildElement(
-            "div",
-            "player-boards-container"
+        const cntr = this.#menuFactory.buildGameMenu(
+            playerOneBoard,
+            playerTwoBoard
         );
 
-        const playerOneGrid = this.#cntrFactory.buildBoard(playerOneBoard);
-        playerOneGrid.classList.add("player-one");
-        const playerTwoGrid = this.#cntrFactory.buildBoard(playerTwoBoard);
-        playerTwoGrid.classList.add("player-two");
-
-        boardsCntr.appendChild(playerOneGrid);
-        boardsCntr.appendChild(playerTwoGrid);
-
-        this.#body.appendChild(boardsCntr);
+        this.#body.appendChild(cntr);
 
         this.renderPlacedShips(playerOneBoard, "player-one");
         this.renderPlacedShips(playerTwoBoard, "player-two");
+    }
+
+    renderHits(hitList, playerClassname) {
+        hitList.forEach((hit) => {
+            const row = hit[0];
+            const col = hit[1];
+            const square = document.querySelector(
+                `.${playerClassname} > .row-container > #r${row}c${col}`
+            );
+
+            square.classList.add("hit");
+        });
     }
 }
