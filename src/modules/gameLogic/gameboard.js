@@ -11,7 +11,7 @@ class Ship {
     }
 
     isSunk() {
-        const sunkedStatus = this.hits === this.length;
+        const sunkedStatus = this.hits >= this.length;
         this.sunk = sunkedStatus;
         return sunkedStatus;
     }
@@ -59,8 +59,11 @@ class GameBoard {
     }
 
     allShipsArePlaced() {
-        this.changeCurrentMessage("All ships are placed");
-        return this.placedShips.length === this.shipCount;
+        const allPlaced = this.placedShips.length === this.shipCount;
+        if (allPlaced) {
+            this.changeCurrentMessage("All ships are placed");
+        }
+        return allPlaced;
     }
 
     clearCurrentMessage() {
@@ -161,6 +164,7 @@ class GameBoard {
         if (ship !== 0) {
             ship.hit();
             this.hits.push(coords);
+            this.changeCurrentMessage(`${ship.name} was hit`);
 
             if (ship.isSunk()) {
                 this.sunkShips.push(ship);
