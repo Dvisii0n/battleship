@@ -142,6 +142,23 @@ class MenuFactory {
 
         return menuContainer;
     }
+
+    buildGameMenu(playerOneBoard, playerTwoBoard) {
+        const boardsCntr = this.#cntrFactory.buildElement(
+            "div",
+            "player-boards-container"
+        );
+
+        const playerOneGrid = this.#cntrFactory.buildBoard(playerOneBoard);
+        playerOneGrid.classList.add("player-one");
+        const playerTwoGrid = this.#cntrFactory.buildBoard(playerTwoBoard);
+        playerTwoGrid.classList.add("player-two");
+
+        boardsCntr.appendChild(playerOneGrid);
+        boardsCntr.appendChild(playerTwoGrid);
+
+        return boardsCntr;
+    }
 }
 
 export { ContainerFactory, MenuFactory };
