@@ -131,15 +131,27 @@ export default class UiHandler {
         this.renderPlacedShips(playerTwoBoard, "player-two");
     }
 
-    renderHits(hitList, playerClassname) {
+    renderHits(hitList, playerClassName) {
         hitList.forEach((hit) => {
             const row = hit[0];
             const col = hit[1];
             const square = document.querySelector(
-                `.${playerClassname} > .row-container > #r${row}c${col}`
+                `.${playerClassName} > .row-container > #r${row}c${col}`
             );
 
             square.classList.add("hit");
+        });
+    }
+
+    renderMisses(missList, playerClassName) {
+        missList.forEach((miss) => {
+            const row = miss[0];
+            const col = miss[1];
+            const square = document.querySelector(
+                `.${playerClassName} > .row-container > #r${row}c${col}`
+            );
+
+            square.classList.add("miss");
         });
     }
 }
