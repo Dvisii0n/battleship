@@ -34,18 +34,19 @@ export default class GameEventHandler {
         if (parentBoard.classList.contains(this.#playerOneClassName)) {
             if (!playerOneHitsStr.includes(`${coordsArr}`)) {
                 playerOne.gameboard.receiveAttack(coordsArr);
-                this.#ui.renderHits(
-                    game.getHits(this.#playerOneClassName),
-                    this.#playerOneClassName
-                );
+                const currentHits = game.getHits(this.#playerOneClassName);
+                const currentMisses = game.getMisses(this.#playerOneClassName);
+                this.#ui.renderHits(currentHits, this.#playerOneClassName);
+                this.#ui.renderMisses(currentMisses, this.#playerOneClassName);
             }
         } else if (parentBoard.classList.contains(this.#playerTwoClassName)) {
             if (!playerTwoHitsStr.includes(`${coordsArr}`)) {
                 playerTwo.gameboard.receiveAttack(coordsArr);
-                this.#ui.renderHits(
-                    game.getHits(this.#playerTwoClassName),
-                    this.#playerTwoClassName
-                );
+
+                const currentHits = game.getHits(this.#playerTwoClassName);
+                const currentMisses = game.getMisses(this.#playerTwoClassName);
+                this.#ui.renderHits(currentHits, this.#playerTwoClassName);
+                this.#ui.renderMisses(currentMisses, this.#playerTwoClassName);
             }
         }
 
