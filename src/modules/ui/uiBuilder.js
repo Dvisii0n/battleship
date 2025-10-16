@@ -8,6 +8,21 @@ class ContainerFactory {
         return el;
     }
 
+    buildArtistLink() {
+        const cntr = this.buildElement("div", "artist");
+
+        const anchor = this.buildElement(
+            "a",
+            "artist-link",
+            "Background made by PxSprite"
+        );
+        anchor.setAttribute("href", "https://www.artstation.com/pxsprite");
+
+        cntr.appendChild(anchor);
+
+        return cntr;
+    }
+
     buildMenuOptions() {
         const container = this.buildElement("div", "menu-options-container");
         const playerBtn = this.buildElement("button", "play-btn", "Play");
@@ -91,10 +106,14 @@ class MenuFactory {
             "main-title",
             "Battleship"
         );
+
         const menuOptions = this.#cntrFactory.buildMenuOptions();
+
+        const artistCntr = this.#cntrFactory.buildArtistLink();
 
         menuContainer.appendChild(mainTitle);
         menuContainer.appendChild(menuOptions);
+        menuContainer.appendChild(artistCntr);
 
         return menuContainer;
     }
