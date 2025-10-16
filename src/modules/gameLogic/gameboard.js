@@ -174,6 +174,7 @@ class GameBoard {
                 return this.changeCurrentMessage("All ships are sunk");
             }
         } else {
+            this.changeCurrentMessage(`Miss on square ${coords}`);
             return this.misses.push(coords);
         }
     }
