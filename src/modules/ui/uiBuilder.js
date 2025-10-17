@@ -131,7 +131,7 @@ class MenuFactory {
         const playerLabel = this.#cntrFactory.buildElement(
             "div",
             "player-label",
-            `Player ${currentPlayer}`
+            `Player ${currentPlayer}: Drag your ships to the board, press R to change axis.`
         );
         const boardCntr = this.#cntrFactory.buildBoard(board);
         const currentPlayerClass =

@@ -131,6 +131,23 @@ export default class UiHandler {
         this.renderPlacedShips(playerTwoBoard, "player-two");
     }
 
+    renderSunkHits(playerBoard, playerClassName) {
+        const boardLength = Object.keys(playerBoard).length;
+
+        for (let row = 0; row < boardLength; row++) {
+            for (let col = 0; col < playerBoard[row].length; col++) {
+                const currShip = playerBoard[row][col];
+                const square = document.querySelector(
+                    `.${playerClassName} > .row-container > #r${row}c${col}`
+                );
+
+                if (currShip.sunk) {
+                    square.classList.add("sunk");
+                }
+            }
+        }
+    }
+
     renderHits(hitList, playerClassName) {
         hitList.forEach((hit) => {
             const row = hit[0];

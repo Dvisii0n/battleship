@@ -168,6 +168,7 @@ class GameBoard {
 
             if (ship.isSunk()) {
                 this.sunkShips.push(ship);
+                this.changeCurrentMessage("Ship destroyed!");
             }
 
             if (this.allShipsSunk()) {

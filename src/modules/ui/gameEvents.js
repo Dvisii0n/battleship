@@ -64,6 +64,7 @@ export default class GameEventHandler {
         const currentMisses = this.game.getMisses(playerClassName);
         this.#ui.renderHits(currentHits, playerClassName);
         this.#ui.renderMisses(currentMisses, playerClassName);
+        this.#ui.renderSunkHits(playerGameboard.board, playerClassName);
         this.changeMsg(playerGameboard.getCurrentMessage());
     }
 
@@ -88,6 +89,9 @@ export default class GameEventHandler {
 
         this.#ui.renderMisses(this.game.getMisses(p1className), p1className);
         this.#ui.renderMisses(this.game.getMisses(p2className), p2className);
+
+        this.#ui.renderSunkHits(playerOne.getBoard(), p1className);
+        this.#ui.renderSunkHits(playerTwo.getBoard(), p2className);
         this.changeMsg(msg);
     }
 
