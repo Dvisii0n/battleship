@@ -50,7 +50,7 @@ class GameBoard {
         return { y: coordsArr[0], x: coordsArr[1] };
     }
 
-    #allShipsSunk() {
+    allShipsSunk() {
         return this.sunkShips.length === this.shipCount;
     }
 
@@ -164,17 +164,17 @@ class GameBoard {
         if (ship !== 0) {
             ship.hit();
             this.hits.push(coords);
-            this.changeCurrentMessage(`${ship.name} was hit`);
+            this.changeCurrentMessage(`Hit!`);
 
             if (ship.isSunk()) {
                 this.sunkShips.push(ship);
             }
 
-            if (this.#allShipsSunk()) {
+            if (this.allShipsSunk()) {
                 return this.changeCurrentMessage("All ships are sunk");
             }
         } else {
-            this.changeCurrentMessage(`Miss on square ${coords}`);
+            this.changeCurrentMessage(`Miss!`);
             return this.misses.push(coords);
         }
     }

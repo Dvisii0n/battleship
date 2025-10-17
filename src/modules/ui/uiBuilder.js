@@ -49,6 +49,11 @@ class ContainerFactory {
         return colCharsContainer;
     }
 
+    buildMsgCntr() {
+        const msgCntr = this.buildElement("div", "msg-cntr");
+        return msgCntr;
+    }
+
     buildBoard(board) {
         const boardLength = Object.keys(board).length;
         const container = this.buildElement("div", "player-board");
@@ -168,11 +173,16 @@ class MenuFactory {
             "player-boards-container"
         );
 
+        const msgCntr = this.#cntrFactory.buildElement("div", "msg-cntr");
+
         const playerOneGrid = this.#cntrFactory.buildBoard(playerOneBoard);
         playerOneGrid.classList.add("player-one");
+        playerOneGrid.classList.add("gamescreen");
         const playerTwoGrid = this.#cntrFactory.buildBoard(playerTwoBoard);
         playerTwoGrid.classList.add("player-two");
+        playerTwoGrid.classList.add("gamescreen");
 
+        boardsCntr.appendChild(msgCntr);
         boardsCntr.appendChild(playerOneGrid);
         boardsCntr.appendChild(playerTwoGrid);
 

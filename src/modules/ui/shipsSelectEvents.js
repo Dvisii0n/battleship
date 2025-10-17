@@ -4,8 +4,9 @@ import GameEventHandler from "./gameEvents.js";
 
 export default class ShipsSelectionEventHandler {
     #ui = new UiHandler();
-    #gameEvents = new GameEventHandler();
+
     #game = new Game();
+    #gameEvents = new GameEventHandler(this.#game);
     #body = document.querySelector("body");
     #axis = "x";
     #axisLabelTxt = ``;
@@ -186,7 +187,7 @@ export default class ShipsSelectionEventHandler {
 
         this.#ui.renderGameMenu(playerOne.getBoard(), playerTwo.getBoard());
 
-        this.#gameEvents.setAttackEvent(this.#game);
+        this.#gameEvents.setAttackEvent();
     }
 
     placeShipsForTest() {

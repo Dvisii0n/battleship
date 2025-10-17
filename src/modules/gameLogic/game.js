@@ -12,6 +12,9 @@ export default class Game {
             { name: "submarine", length: 3 },
             { name: "patrol_boat", length: 2 },
         ];
+        this.playerOneClassName = "player-one";
+        this.playerTwoClassName = "player-two";
+        this.currentTurn = 1;
     }
 
     getPlayers() {
