@@ -90,7 +90,7 @@ a:hover {
 .player-label {
     grid-column: 1 /2;
     grid-row: 1 / 2;
-    font-size: 45px;
+    font-size: 32px;
     justify-self: center;
 }
 
@@ -231,6 +231,7 @@ a:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 6fr;
+    column-gap: 55px;
 }
 
 .msg-cntr {
@@ -259,4 +260,9 @@ a:hover {
 
 .miss {
     background-color: rgba(148, 148, 148, 0.384);
+}
+
+.sunk {
+    background-image: url("./assets/gifs/explosion.gif");
+    background-size: cover;
 }
