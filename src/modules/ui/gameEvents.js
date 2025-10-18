@@ -1,4 +1,10 @@
 import UiHandler from "./uiHandler.js";
+import shotAudio from "../../assets/audio/shot.wav";
+import missAudio from "../../assets/audio/miss.mp3";
+import explosionAudio from "../../assets/audio/explosion.wav";
+import winAudio from "../../assets/audio/win.wav";
+import boardReadyAudio from "../../assets/audio/boardReady.wav";
+import errorAudio from "../../assets/audio/error.wav";
 
 export default class GameEventHandler {
     #ui = new UiHandler();
@@ -10,6 +16,13 @@ export default class GameEventHandler {
     #ready = true;
     #winner = false;
     #attacking = true;
+
+    #shotSound = new Audio(shotAudio);
+    #missSound = new Audio(missAudio);
+    #explosionSound = new Audio(explosionAudio);
+    #winSound = new Audio(winAudio);
+    #boardReadySound = new Audio(boardReadyAudio);
+    #errorSound = new Audio(errorAudio);
 
     constructor(game) {
         this.game = game;
@@ -59,6 +72,7 @@ export default class GameEventHandler {
         if (this.#winner) {
             return;
         }
+        this.#boardReadySound.play();
         this.changeMsg(`${this.#currentTurn}: It's your turn.`);
         if (this.#currentTurn === "Player 1") {
             this.#ui.showShips(this.#playerOneSetSquares);
@@ -82,23 +96,25 @@ export default class GameEventHandler {
 
         if (
             parentBoard.classList.contains("player-two") &&
-            this.#currentTurn !== "Player 1"
+            this.#currentTurn === "Player 2"
         ) {
             this.changeMsg(
                 `${
                     this.#currentTurn
                 }: Friendly Fire will not be tolerated, click the opponent's board.`
             );
+            this.#errorSound.play();
             return;
         } else if (
             parentBoard.classList.contains("player-one") &&
-            this.#currentTurn !== "Player 2"
+            this.#currentTurn === "Player 1"
         ) {
             this.changeMsg(
                 `${
                     this.#currentTurn
                 }: Friendly Fire will not be tolerated, click the opponent's board.`
             );
+            this.#errorSound.play();
             return;
         }
 
@@ -166,10 +182,18 @@ export default class GameEventHandler {
         if (currentMessage === "Hit!") {
             this.#attacking = true;
             this.#ready = true;
+            const overlappedShot = new Audio(shotAudio);
+            overlappedShot.play();
 
             this.changeMsg(`${this.#currentTurn}: Hit, Keep attacking!`);
+        } else if (currentMessage === "Ship destroyed!") {
+            this.#attacking = true;
+            this.#ready = true;
+            const overlappedExplosion = new Audio(explosionAudio);
+            overlappedExplosion.play();
         } else if (currentMessage === "Miss!") {
             this.#attacking = false;
+            this.#missSound.play();
         }
     }
 
@@ -185,6 +209,8 @@ export default class GameEventHandler {
         }
 
         this.#winner = true;
+
+        this.#winSound.play();
 
         const p1className = this.game.playerOneClassName;
         const p2className = this.game.playerTwoClassName;
