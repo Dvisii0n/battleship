@@ -2,10 +2,12 @@ import UiHandler from "./uiHandler.js";
 import Game from "../gameLogic/gameUtils.js";
 import GameEventHandler from "./gameEvents.js";
 import menuAudio from "../../assets/audio/menu.mp3";
+import clickAudio from "../../assets/audio/click.mp3";
+import changeAxisAudio from "../../assets/audio/change.mp3";
+import dropAudio from "../../assets/audio/drop.mp3";
 
 export default class ShipsSelectionEventHandler {
     #ui = new UiHandler();
-
     #game = new Game();
     #gameEvents = new GameEventHandler(this.#game);
     #body = document.querySelector("body");
@@ -15,12 +17,29 @@ export default class ShipsSelectionEventHandler {
     #currentPlayerClassName = "";
     #playerShipsReady = false;
 
+    #menuMusic = new Audio(menuAudio);
+    #clickSound = new Audio(clickAudio);
+    #changeSound = new Audio(changeAxisAudio);
+    #dropSound = new Audio(dropAudio);
+
     setInitialEvents() {
         this.setPlayEvents();
         this.setKeyEvents();
-        const menuMusic = new Audio(menuAudio);
+        this.setMenuAudio();
+    }
 
-        menuMusic.play();
+    setMenuAudio() {
+        this.#menuMusic.play();
+        this.setButtonAudio();
+    }
+
+    setButtonAudio() {
+        const btns = document.querySelectorAll("button");
+        btns.forEach((el) => {
+            el.addEventListener("click", (event) => {
+                this.#clickSound.play();
+            });
+        });
     }
 
     setDragEvents() {
@@ -67,6 +86,7 @@ export default class ShipsSelectionEventHandler {
     setReadyPlayerOneEvent() {
         const btn = document.querySelector(".ready-btn");
         btn.addEventListener("click", () => {
+            this.#clickSound.play();
             if (this.#playerShipsReady) {
                 this.#ui.clearBody();
 
@@ -78,7 +98,8 @@ export default class ShipsSelectionEventHandler {
                 //remove after tests
                 this.placeShipsForTest();
             } else {
-                alert("Current players ships are not ready");
+                this.changePlayerMsg("Ships are not ready");
+                this.resetMsg(1000);
             }
         });
     }
@@ -86,10 +107,12 @@ export default class ShipsSelectionEventHandler {
     setReadyPlayerTwoEvent() {
         const btn = document.querySelector(".ready-btn");
         btn.addEventListener("click", () => {
+            this.#clickSound.play();
             if (this.#playerShipsReady) {
                 this.startGame();
             } else {
-                alert("Current players ships are not ready");
+                this.changePlayerMsg("Ships are not ready");
+                this.resetMsg(1000);
             }
         });
     }
@@ -97,6 +120,7 @@ export default class ShipsSelectionEventHandler {
     setResetBoardEvent() {
         const btn = document.querySelector(".reset-btn");
         btn.addEventListener("click", () => {
+            this.#clickSound.play();
             this.#playerShipsReady = false;
             const player = this.#game.getPlayers()[this.#currrentPlayer - 1];
             this.#game.clearPlayerBoard(player.gameboard);
@@ -105,6 +129,7 @@ export default class ShipsSelectionEventHandler {
                 player.getBoard(),
                 this.#currentPlayerClassName
             );
+            this.resetMsg(0);
         });
     }
 
@@ -114,6 +139,7 @@ export default class ShipsSelectionEventHandler {
                 return;
             }
             if (event.key === "r") {
+                this.#changeSound.play();
                 this.#axis === "x" ? (this.#axis = "y") : (this.#axis = "x");
                 this.#axisLabelTxt = `Axis: ${this.#axis.toUpperCase()}`;
                 const axisLabel = document.querySelector(".axis-label");
@@ -167,12 +193,10 @@ export default class ShipsSelectionEventHandler {
 
         if (this.#game.allShipsPlacedOnPlayerBoard(player.gameboard)) {
             this.#playerShipsReady = true;
-            alert("All ships are ready to sail");
+            this.changePlayerMsg("All ships are ready for battle");
         }
 
-        console.log(player.gameboard);
-
-        console.log(player.gameboard.getCurrentMessage());
+        this.#dropSound.play();
     }
 
     onDragOver(event, source) {
@@ -235,5 +259,22 @@ export default class ShipsSelectionEventHandler {
         }
 
         console.log(player.gameboard.getCurrentMessage());
+    }
+
+    resetMsg(delay) {
+        setTimeout(
+            () =>
+                this.changePlayerMsg(
+                    `Player ${
+                        this.#currrentPlayer
+                    }: Drag your ships to the board, press R to change axis.`
+                ),
+            delay
+        );
+    }
+
+    changePlayerMsg(msg, reset) {
+        const playerLabel = document.querySelector(".player-label");
+        playerLabel.textContent = msg;
     }
 }
