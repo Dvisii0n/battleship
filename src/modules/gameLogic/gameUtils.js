@@ -14,7 +14,6 @@ export default class Game {
         ];
         this.playerOneClassName = "player-one";
         this.playerTwoClassName = "player-two";
-        this.currentTurn = 1;
     }
 
     getPlayers() {
