@@ -9,7 +9,6 @@ export default class App {
     run() {
         this.#ui.renderMainMenu();
 
-        this.#shipsEvents.setPlayEvents();
-        this.#shipsEvents.setKeyEvents();
+        this.#shipsEvents.setInitialEvents();
     }
 }
