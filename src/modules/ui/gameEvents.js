@@ -13,9 +13,9 @@ export default class GameEventHandler {
     #currentTurn = "Player 1";
     #playerOneSetSquares = [];
     #playerTwoSetSquares = [];
-    #ready = true;
+    #ready = false;
     #winner = false;
-    #attacking = true;
+    #attacking = false;
 
     #shotSound = new Audio(shotAudio);
     #missSound = new Audio(missAudio);
@@ -30,10 +30,15 @@ export default class GameEventHandler {
 
     setInitialEvents() {
         this.saveSetSquares();
-        this.changeMsg(`${this.#currentTurn}: It's your turn.`);
+        this.changeMsg(`${this.#currentTurn}: Get ready!`);
+        this.#ui.hideShips(this.#playerOneSetSquares);
         this.#ui.hideShips(this.#playerTwoSetSquares);
         this.setAttackEvent();
         this.setTurnReadyEvent();
+
+        const readyBtn = document.querySelector(".turn-ready-btn");
+
+        readyBtn.classList.toggle("hidden");
     }
 
     saveSetSquares() {
