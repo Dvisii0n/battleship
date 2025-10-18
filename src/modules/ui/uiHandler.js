@@ -171,4 +171,16 @@ export default class UiHandler {
             square.classList.add("miss");
         });
     }
+
+    hideShips(setSquares) {
+        setSquares.forEach((square) => {
+            square.classList.remove("set");
+        });
+    }
+
+    showShips(setSquares) {
+        setSquares.forEach((setSquare) => {
+            setSquare.classList.add("set");
+        });
+    }
 }

@@ -25,7 +25,11 @@ class ContainerFactory {
 
     buildMenuOptions() {
         const container = this.buildElement("div", "menu-options-container");
-        const playerBtn = this.buildElement("button", "play-btn", "Play");
+        const playerBtn = this.buildElement(
+            "button",
+            "play-btn",
+            "Play (PvP Local)"
+        );
 
         container.appendChild(playerBtn);
 
@@ -182,9 +186,41 @@ class MenuFactory {
         playerTwoGrid.classList.add("player-two");
         playerTwoGrid.classList.add("gamescreen");
 
+        const readyPlayerOneBtn = this.#cntrFactory.buildElement(
+            "button",
+            "turn-ready-btn",
+            "Ready"
+        );
+
+        const readyPlayerTwoBtn = this.#cntrFactory.buildElement(
+            "button",
+            "turn-ready-btn",
+            "Ready"
+        );
+
+        const readyPlayerOneBtnCntr = this.#cntrFactory.buildElement(
+            "div",
+            "ready-btn-cntr"
+        );
+        const readyPlayerTwoBtnCntr = this.#cntrFactory.buildElement(
+            "div",
+            "ready-btn-cntr"
+        );
+
+        readyPlayerOneBtn.classList.add("player-one");
+        readyPlayerTwoBtn.classList.add("player-two");
+
+        readyPlayerOneBtn.classList.add("hidden");
+        readyPlayerTwoBtn.classList.add("hidden");
+
+        readyPlayerOneBtnCntr.appendChild(readyPlayerOneBtn);
+        readyPlayerTwoBtnCntr.appendChild(readyPlayerTwoBtn);
+
         boardsCntr.appendChild(msgCntr);
         boardsCntr.appendChild(playerOneGrid);
         boardsCntr.appendChild(playerTwoGrid);
+        boardsCntr.appendChild(readyPlayerOneBtnCntr);
+        boardsCntr.appendChild(readyPlayerTwoBtnCntr);
 
         return boardsCntr;
     }

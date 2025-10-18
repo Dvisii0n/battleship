@@ -4,10 +4,35 @@ export default class GameEventHandler {
     #ui = new UiHandler();
     #playerOneClassName = "player-one";
     #playerTwoClassName = "player-two";
+    #currentTurn = "Player 1";
+    #playerOneSetSquares = [];
+    #playerTwoSetSquares = [];
+    #ready = true;
+    #winner = false;
+    #attacking = true;
 
     constructor(game) {
         this.game = game;
     }
+
+    setInitialEvents() {
+        this.saveSetSquares();
+        this.changeMsg(`${this.#currentTurn}: It's your turn.`);
+        this.#ui.hideShips(this.#playerTwoSetSquares);
+        this.setAttackEvent();
+        this.setTurnReadyEvent();
+    }
+
+    saveSetSquares() {
+        this.#playerOneSetSquares = document.querySelectorAll(
+            `.${this.#playerOneClassName} > .row-container > .set`
+        );
+
+        this.#playerTwoSetSquares = document.querySelectorAll(
+            `.${this.#playerTwoClassName} > .row-container > .set`
+        );
+    }
+
     setAttackEvent() {
         const squares = document.querySelectorAll(".grid-square");
 
@@ -20,7 +45,63 @@ export default class GameEventHandler {
         });
     }
 
+    setTurnReadyEvent() {
+        const readyBtns = document.querySelectorAll(".turn-ready-btn");
+
+        readyBtns.forEach((btn) => {
+            btn.addEventListener("click", (event) => {
+                this.onReady(btn);
+            });
+        });
+    }
+
+    onReady(btn) {
+        if (this.#winner) {
+            return;
+        }
+        this.changeMsg(`${this.#currentTurn}: It's your turn.`);
+        if (this.#currentTurn === "Player 1") {
+            this.#ui.showShips(this.#playerOneSetSquares);
+            this.#ui.hideShips(this.#playerTwoSetSquares);
+        } else if (this.#currentTurn === "Player 2") {
+            this.#ui.showShips(this.#playerTwoSetSquares);
+            this.#ui.hideShips(this.#playerOneSetSquares);
+        }
+
+        this.#ready = true;
+
+        btn.classList.toggle("hidden");
+    }
+
     setAttackLogic(square, coordsId) {
+        if (!this.#ready) {
+            return;
+        }
+
+        const parentBoard = square.parentNode.parentNode;
+
+        if (
+            parentBoard.classList.contains("player-two") &&
+            this.#currentTurn !== "Player 1"
+        ) {
+            this.changeMsg(
+                `${
+                    this.#currentTurn
+                }: Friendly Fire will not be tolerated, click the opponent's board.`
+            );
+            return;
+        } else if (
+            parentBoard.classList.contains("player-one") &&
+            this.#currentTurn !== "Player 2"
+        ) {
+            this.changeMsg(
+                `${
+                    this.#currentTurn
+                }: Friendly Fire will not be tolerated, click the opponent's board.`
+            );
+            return;
+        }
+
         const playerOne = this.game.getPlayerOne();
         const playerTwo = this.game.getPlayerTwo();
 
@@ -30,8 +111,6 @@ export default class GameEventHandler {
         const playerTwoHitsStr = this.game
             .getHits(this.#playerTwoClassName)
             .join("-");
-
-        const parentBoard = square.parentNode.parentNode;
 
         const coordsArr = this.getCoordsArrFromId(coordsId);
 
@@ -53,7 +132,22 @@ export default class GameEventHandler {
             }
         }
 
+        if (!this.#attacking) {
+            this.#ready = false;
+            this.changeTurn();
+
+            this.#ui.hideShips(this.#playerOneSetSquares);
+            this.#ui.hideShips(this.#playerTwoSetSquares);
+        }
+
         this.checkForWin(playerOne, playerTwo);
+
+        if (!this.#winner && !this.#attacking) {
+            setTimeout(
+                () => this.changeMsg(`${this.#currentTurn}: Get ready!`),
+                750
+            );
+        }
 
         console.log(this.game.getPlayers());
     }
@@ -65,7 +159,18 @@ export default class GameEventHandler {
         this.#ui.renderHits(currentHits, playerClassName);
         this.#ui.renderMisses(currentMisses, playerClassName);
         this.#ui.renderSunkHits(playerGameboard.board, playerClassName);
-        this.changeMsg(playerGameboard.getCurrentMessage());
+        const currentMessage = playerGameboard.getCurrentMessage();
+
+        this.changeMsg(currentMessage);
+
+        if (currentMessage === "Hit!") {
+            this.#attacking = true;
+            this.#ready = true;
+
+            this.changeMsg(`${this.#currentTurn}: Hit, Keep attacking!`);
+        } else if (currentMessage === "Miss!") {
+            this.#attacking = false;
+        }
     }
 
     checkForWin(playerOne, playerTwo) {
@@ -78,6 +183,8 @@ export default class GameEventHandler {
         } else {
             return;
         }
+
+        this.#winner = true;
 
         const p1className = this.game.playerOneClassName;
         const p2className = this.game.playerTwoClassName;
@@ -110,5 +217,28 @@ export default class GameEventHandler {
     changeMsg(msg) {
         const msgCntr = document.querySelector(".msg-cntr");
         msgCntr.textContent = msg;
+    }
+
+    toggleReadyBtn() {
+        const playerClassName =
+            this.#currentTurn === "Player 1"
+                ? this.#playerOneClassName
+                : this.#playerTwoClassName;
+        const btn = document.querySelector(
+            `.turn-ready-btn.${playerClassName}`
+        );
+
+        btn.classList.toggle("hidden");
+    }
+
+    changeTurn() {
+        this.#currentTurn =
+            this.#currentTurn === "Player 1" ? "Player 2" : "Player 1";
+
+        if (this.#currentTurn === "Player 1") {
+            this.toggleReadyBtn(this.#playerTwoClassName);
+        } else if (this.#currentTurn === "Player 2") {
+            this.toggleReadyBtn(this.#playerOneClassName);
+        }
     }
 }

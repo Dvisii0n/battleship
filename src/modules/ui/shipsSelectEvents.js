@@ -1,6 +1,7 @@
 import UiHandler from "./uiHandler.js";
-import Game from "../gameLogic/game.js";
+import Game from "../gameLogic/gameUtils.js";
 import GameEventHandler from "./gameEvents.js";
+import menuAudio from "../../assets/audio/menu.mp3";
 
 export default class ShipsSelectionEventHandler {
     #ui = new UiHandler();
@@ -13,6 +14,14 @@ export default class ShipsSelectionEventHandler {
     #currrentPlayer = 0;
     #currentPlayerClassName = "";
     #playerShipsReady = false;
+
+    setInitialEvents() {
+        this.setPlayEvents();
+        this.setKeyEvents();
+        const menuMusic = new Audio(menuAudio);
+
+        menuMusic.play();
+    }
 
     setDragEvents() {
         const ships = document.querySelectorAll(".ship-sprite");
@@ -101,6 +110,9 @@ export default class ShipsSelectionEventHandler {
 
     setKeyEvents() {
         this.#body.addEventListener("keydown", (event) => {
+            if (document.querySelector(".axis-label") === null) {
+                return;
+            }
             if (event.key === "r") {
                 this.#axis === "x" ? (this.#axis = "y") : (this.#axis = "x");
                 this.#axisLabelTxt = `Axis: ${this.#axis.toUpperCase()}`;
@@ -187,7 +199,7 @@ export default class ShipsSelectionEventHandler {
 
         this.#ui.renderGameMenu(playerOne.getBoard(), playerTwo.getBoard());
 
-        this.#gameEvents.setAttackEvent();
+        this.#gameEvents.setInitialEvents();
     }
 
     placeShipsForTest() {
