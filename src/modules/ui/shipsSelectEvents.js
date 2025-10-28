@@ -17,7 +17,7 @@ export default class ShipsSelectionEventHandler {
     #currentPlayerClassName = "";
     #playerShipsReady = false;
 
-    #menuMusic = new Audio(menuAudio);
+    // #menuMusic = new Audio(menuAudio);
     #clickSound = new Audio(clickAudio);
     #changeSound = new Audio(changeAxisAudio);
     #dropSound = new Audio(dropAudio);
@@ -29,7 +29,7 @@ export default class ShipsSelectionEventHandler {
     }
 
     setMenuAudio() {
-        this.#menuMusic.play();
+        // this.#menuMusic.play();
         this.setButtonAudio();
     }
 
