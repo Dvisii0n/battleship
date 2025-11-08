@@ -16,6 +16,7 @@ export default class ShipsSelectionEventHandler {
     #currrentPlayer = 0;
     #currentPlayerClassName = "";
     #playerShipsReady = false;
+    #dragsource = null;
 
     // #menuMusic = new Audio(menuAudio);
     #clickSound = new Audio(clickAudio);
@@ -46,7 +47,6 @@ export default class ShipsSelectionEventHandler {
         const ships = document.querySelectorAll(".ship-sprite");
         const squares = document.querySelectorAll(".grid-square");
         const playerBoard = document.querySelector(".player-board");
-        let source = null;
 
         playerBoard.addEventListener("dragleave", (event) => {
             this.#ui.clearActiveAndForbiddenSquares();
@@ -54,19 +54,22 @@ export default class ShipsSelectionEventHandler {
 
         ships.forEach((ship) => {
             ship.addEventListener("dragstart", (event) => {
-                source = event.target;
+                this.#dragsource = event.target;
+                event.dataTransfer.effectAllowed = "move";
+                event.dataTransfer.setData("text/html", event.target.id);
             });
         });
 
         squares.forEach((square) => {
             square.addEventListener("dragover", (event) => {
                 event.preventDefault();
-                this.onDragOver(event, source);
+                event.dataTransfer.dropEffect = "move";
+                this.onDragOver(event, this.#dragsource);
             });
 
             square.addEventListener("drop", (event) => {
                 event.preventDefault();
-                this.onDrop(event, source);
+                this.onDrop(event, this.#dragsource);
             });
         });
     }

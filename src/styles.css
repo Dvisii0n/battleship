@@ -206,26 +206,6 @@ a:hover {
     filter: grayscale(100%);
 }
 
-.ship-sprite.carrier {
-    content: url("./assets/ships/x/carrier_x.png");
-}
-
-.ship-sprite.battleship {
-    content: url("./assets/ships/x/battleship_x.png");
-}
-
-.ship-sprite.destroyer {
-    content: url("./assets/ships/x/destroyer_x.png");
-}
-
-.ship-sprite.submarine {
-    content: url("./assets/ships/x/submarine_x.png");
-}
-
-.ship-sprite.patrol_boat {
-    content: url("./assets/ships/x/patrol_boat_x.png");
-}
-
 /*Game section */
 
 .player-boards-container {

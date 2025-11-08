@@ -1,3 +1,9 @@
+import carrierImg from "../../assets/ships/x/carrier_x.png";
+import battleshipImg from "../../assets/ships/x/battleship_x.png";
+import destroyerImg from "../../assets/ships/x/destroyer_x.png";
+import submarineImg from "../../assets/ships/x/submarine_x.png";
+import patrolBoatImg from "../../assets/ships/x/patrol_boat_x.png";
+
 class ContainerFactory {
     constructor() {}
 
@@ -88,11 +94,22 @@ class ContainerFactory {
     buildShipsSelectionContainer(ships) {
         const container = this.buildElement("div", "ships-container");
 
+        const shipImages = {
+            carrier: carrierImg,
+            battleship: battleshipImg,
+            destroyer: destroyerImg,
+            submarine: submarineImg,
+            patrol_boat: patrolBoatImg,
+        };
+
         ships.forEach((ship) => {
             const shipSpriteContainer = this.buildElement("img", "ship-sprite");
+            shipSpriteContainer.setAttribute("draggable", "true");
             shipSpriteContainer.classList.add(ship.name);
             shipSpriteContainer.setAttribute("ship_length", ship.length);
             shipSpriteContainer.setAttribute("id", ship.name);
+
+            shipSpriteContainer.src = shipImages[ship.name];
 
             container.appendChild(shipSpriteContainer);
         });
